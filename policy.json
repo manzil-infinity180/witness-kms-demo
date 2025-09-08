@@ -1,0 +1,34 @@
+{
+  "expires": "2025-12-31T23:59:59Z",
+  "steps": {
+    "build": {
+      "name": "build", 
+      "attestations": [
+        {
+          "type": "https://witness.dev/attestations/command-run/v0.1"
+        },
+        {
+          "type": "https://witness.dev/attestations/product/v0.1"
+        },
+        {
+          "type": "https://witness.dev/attestations/environment/v0.1"
+        },
+        {
+          "type": "https://witness.dev/attestations/material/v0.1"
+        }
+      ],
+      "functionaries": [
+        {
+          "type": "publickey",
+          "publickeyid": "awskms:///arn:aws:kms:us-east-1:756546933635:key/fcc0689a-5b7f-4779-983f-39be43cba0bd"
+        }
+      ]
+    }
+  },
+  "publickeys": {
+    "awskms:///arn:aws:kms:us-east-1:756546933635:key/fcc0689a-5b7f-4779-983f-39be43cba0bd": {
+      "keyid": "awskms:///arn:aws:kms:us-east-1:756546933635:key/fcc0689a-5b7f-4779-983f-39be43cba0bd",
+      "key":"LS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS0KTUZrd0V3WUhLb1pJemowQ0FRWUlLb1pJemowREFRY0RRZ0FFQTNyY2FnU2dyQ1VUYW5BbVZYYTN0V1NhRWZCZgpKMkVRZUF4Q29LRnJGd1JLWG5DTFJQTi9lcWw0U25xSG5RZ2RFNHVod0hvK3pUNzFQSHFNUnlpbXZRPT0KLS0tLS1FTkQgUFVCTElDIEtFWS0tLS0tCg=="
+    }
+  }
+}

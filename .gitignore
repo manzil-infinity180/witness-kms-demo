@@ -1,0 +1,10 @@
+vendor
+.env
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+release
+*.out
+*.tar.gz
