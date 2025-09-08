@@ -1,4 +1,3 @@
----
 ```
 # Install AWS CLI
 aws configure
