@@ -1,3 +1,5 @@
+# Witness Demo
+* Create the key at `AWS`
 ```bash
 # Install AWS CLI
 aws configure
@@ -22,12 +24,15 @@ aws kms create-alias \
   --target-key-id 1234abcd-12ab-34cd-56ef-1234567890ab
 ```
 
+* Run the `witness run` command, it will output `build.json` attestation
 ```bash
 witness run -s build -o build.json --signer-kms-ref=awskms:///arn:aws:kms:us-east-1:756546933635:key/fcc0689a-5b7f-4779-983f-39be43cba0bd -- make build
 
+# View your attestation
 cat build.json | jq -r .payload | base64 -d | jq
 ```
 
+* Create the witness policy and replace the `publickeys.key` with your public key and other details like awskms arn
 ```json
 {
   "expires": "2025-12-31T23:59:59Z",
@@ -66,11 +71,12 @@ cat build.json | jq -r .payload | base64 -d | jq
 
 ```
 
+* Sign the policy and it will return the signed policy `policy-signed.json`
 ```bash
 witness sign -f policy.json -o policy-signed.json --signer-kms-ref="awskms:///arn:aws:kms:us-east-1:756546933635:key/fcc0689a-5b7f-4779-983f-39be43cba0bd"
 
 ```
-
+* View your policy
 ```json
 witness-kms-demo (main) $ cat policy-signed.json | jq -r .payload | base64 -d | jq
 {
@@ -107,7 +113,7 @@ witness-kms-demo (main) $ cat policy-signed.json | jq -r .payload | base64 -d | 
   }
 }
 ```
-
+* Verify the signed policy and attestation (Not working currently i have some problem looking to fix)
 ```bash
 witness verify -p policy-signed.json -a build.json --verifier-kms-ref="awskms:///arn:aws:kms:us-east-1:756546933635:key/fcc0689a-5b7f-4779-983f-39be43cba0bd" -f release.tar.gz
 ```
