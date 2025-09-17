@@ -8,3 +8,4 @@ vendor
 release
 *.out
 *.tar.gz
+attachTest.pem
