@@ -37,6 +37,10 @@ witness attach attestation \
   manzilrahul/witness-kms-attach-cmd-test@sha256:8abe274a0afab7843bc09b22ff31dd35011e299bd1904c8e26554df6cae19072
 ```
 
+<img width="1048" height="902" alt="Screenshot 2025-09-17 at 6 13 12 PM" src="https://github.com/user-attachments/assets/5845097d-1700-47d9-80be-dacfee234640" />
+
+<img width="1048" height="902" alt="Screenshot 2025-09-17 at 6 13 36 PM" src="https://github.com/user-attachments/assets/f02c19de-ae7a-4dcb-8d0c-b49a8599c8ec" />
+
 ---
 
 ### Full log 
