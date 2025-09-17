@@ -409,4 +409,45 @@ INFO    remote.write
 INFO    ghcr.io/manzil-infinity180/witness-kms-attach-cmd-ghcr-test:sha256-317fc563c5b95d640c443a673c01d33fd58e7fc3d1585370976b8d27b99a23c3.att 
 witness-kms-demo (main) $ 
 ```
+</details>
+
+---
+
+TODO: 
 <details>
+  <summary>TODO </summary>
+
+```
+witness-kms-demo (main) $ /Users/rahulxf/PleaseHelpMeGod/witness/bin/witness attach attestation --attestation build-attach-attestation2.json <aws_account>.dkr.ecr.us-east-1.amazonaws.com/witness-attach-testing@sha256:416afe5cdcf8ce532ceada1d3191b2961f0009fd8b3f1b7497991df9b67f49ea
+INFO    756546933635.dkr.ecr.us-east-1.amazonaws.com/witness-attach-testing@sha256:416afe5cdcf8ce532ceada1d3191b2961f0009fd8b3f1b7497991df9b67f49ea 
+INFO    att                                          
+INFO    ref: 756546933635.dkr.ecr.us-east-1.amazonaws.com/witness-attach-testing@sha256:416afe5cdcf8ce532ceada1d3191b2961f0009fd8b3f1b7497991df9b67f49ea 
+INFO    desc mediaType: application/vnd.oci.image.index.v1+json 
+INFO    index                                        
+INFO    AttachAttestationToUnknown:                  
+INFO    index Attestations                           
+INFO    attestations                                 
+INFO    sha256:416afe5cdcf8ce532ceada1d3191b2961f0009fd8b3f1b7497991df9b67f49ea 
+INFO    img %s<nil>                                  
+INFO    &{0x140005ba300}                             
+INFO    remote.write                                 
+INFO    756546933635.dkr.ecr.us-east-1.amazonaws.com/witness-attach-testing:sha256-416afe5cdcf8ce532ceada1d3191b2961f0009fd8b3f1b7497991df9b67f49ea.att 
+ERROR   attaching payload from build-attach-attestation2.json: PUT https://756546933635.dkr.ecr.us-east-1.amazonaws.com/v2/witness-attach-testing/manifests/sha256-416afe5cdcf8ce532ceada1d3191b2961f0009fd8b3f1b7497991df9b67f49ea.att: UNSUPPORTED: Invalid parameter at 'ImageManifest' failed to satisfy constraint: 'Image has to have at least 1 layer' 
+witness-kms-demo (main) $ cosign attach attestation --attestation build-attach-attestation.json 756546933635.dkr.ecr.us-east-1.amazonaws.com/witness-attach-testing@sha256:416afe5cdcf8ce532ceada1d3191b2961f0009fd8b3f1b7497991df9b67f49ea
+Using payload from: build-attach-attestation.json%                                                                                     witness-kms-demo (main) $ /Users/rahulxf/PleaseHelpMeGod/witness/bin/witness attach attestation --attestation build-attach-attestation2.json 756546933635.dkr.ecr.us-east-1.amazonaws.com/witness-attach-testing@sha256:416afe5cdcf8ce532ceada1d3191b2961f0009fd8b3f1b7497991df9b67f49ea
+INFO    756546933635.dkr.ecr.us-east-1.amazonaws.com/witness-attach-testing@sha256:416afe5cdcf8ce532ceada1d3191b2961f0009fd8b3f1b7497991df9b67f49ea 
+INFO    att                                          
+INFO    ref: 756546933635.dkr.ecr.us-east-1.amazonaws.com/witness-attach-testing@sha256:416afe5cdcf8ce532ceada1d3191b2961f0009fd8b3f1b7497991df9b67f49ea 
+INFO    desc mediaType: application/vnd.oci.image.index.v1+json 
+INFO    index                                        
+INFO    AttachAttestationToUnknown:                  
+INFO    index Attestations                           
+INFO    attestations                                 
+INFO    sha256:416afe5cdcf8ce532ceada1d3191b2961f0009fd8b3f1b7497991df9b67f49ea 
+INFO    img %s&{0x1400053e0d0 756546933635.dkr.ecr.us-east-1.amazonaws.com/witness-attach-testing:sha256-416afe5cdcf8ce532ceada1d3191b2961f0009fd8b3f1b7497991df9b67f49ea.att} 
+INFO    &{0x14000a02480}                             
+INFO    remote.write                                 
+INFO    756546933635.dkr.ecr.us-east-1.amazonaws.com/witness-attach-testing:sha256-416afe5cdcf8ce532ceada1d3191b2961f0009fd8b3f1b7497991df9b67f49ea.att 
+witness-kms-demo (main) $ 
+```
+</details>
