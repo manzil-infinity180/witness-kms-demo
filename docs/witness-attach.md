@@ -443,8 +443,10 @@ witness run --step build -k attachTest.pem -o build-attach-attestation.json -- d
 ```
 
 ### Attach your attestation 
-```
-/Users/rahulxf/PleaseHelpMeGod/witness/bin/witness attach attestation --attestation build-attach-attestation.json 756546933635.dkr.ecr.us-east-1.amazonaws.com/witness-ecr-testing@sha256:18b1f8b1c61f0a8df73d35efc49cc5af9471a88260f74f5d8e4170a22b77426e
+```ts
+/Users/rahulxf/PleaseHelpMeGod/witness/bin/witness attach attestation \
+--attestation build-attach-attestation.json \
+756546933635.dkr.ecr.us-east-1.amazonaws.com/witness-ecr-testing@sha256:18b1f8b1c61f0a8df73d35efc49cc5af9471a88260f74f5d8e4170a22b77426e
 ```
 <img width="1470" height="956" alt="Screenshot 2025-09-19 at 12 34 07 AM" src="https://github.com/user-attachments/assets/8601b8ad-0c59-4539-afbe-4a55c3e7c2aa" />
 <img width="1470" height="956" alt="Screenshot 2025-09-19 at 12 34 17 AM" src="https://github.com/user-attachments/assets/6dedad98-257a-48ac-bf71-ed4845cf020f" />
