@@ -412,42 +412,126 @@ witness-kms-demo (main) $
 </details>
 
 ---
+## Using AWS ECR
 
-TODO: 
-<details>
-  <summary>TODO </summary>
+### Create repository
+If a repository for your image does not already exist in ECR, it must be created.
+```
+aws ecr create-repository --repository-name witness-ecr-testing --region us-east-1
+```
+### Login to you aws account 
+Your Docker client needs to be authenticated with the ECR registry to which you intend to push the image. Obtain an authentication token and use it to log in. 
+```
+aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 756546933635.dkr.ecr.us-east-1.amazonaws.com
+```
+
+### Build image, tag and push
 
 ```
-witness-kms-demo (main) $ /Users/rahulxf/PleaseHelpMeGod/witness/bin/witness attach attestation --attestation build-attach-attestation2.json <aws_account>.dkr.ecr.us-east-1.amazonaws.com/witness-attach-testing@sha256:416afe5cdcf8ce532ceada1d3191b2961f0009fd8b3f1b7497991df9b67f49ea
-INFO    756546933635.dkr.ecr.us-east-1.amazonaws.com/witness-attach-testing@sha256:416afe5cdcf8ce532ceada1d3191b2961f0009fd8b3f1b7497991df9b67f49ea 
-INFO    att                                          
-INFO    ref: 756546933635.dkr.ecr.us-east-1.amazonaws.com/witness-attach-testing@sha256:416afe5cdcf8ce532ceada1d3191b2961f0009fd8b3f1b7497991df9b67f49ea 
-INFO    desc mediaType: application/vnd.oci.image.index.v1+json 
-INFO    index                                        
-INFO    AttachAttestationToUnknown:                  
-INFO    index Attestations                           
-INFO    attestations                                 
-INFO    sha256:416afe5cdcf8ce532ceada1d3191b2961f0009fd8b3f1b7497991df9b67f49ea 
-INFO    img %s<nil>                                  
-INFO    &{0x140005ba300}                             
-INFO    remote.write                                 
-INFO    756546933635.dkr.ecr.us-east-1.amazonaws.com/witness-attach-testing:sha256-416afe5cdcf8ce532ceada1d3191b2961f0009fd8b3f1b7497991df9b67f49ea.att 
-ERROR   attaching payload from build-attach-attestation2.json: PUT https://756546933635.dkr.ecr.us-east-1.amazonaws.com/v2/witness-attach-testing/manifests/sha256-416afe5cdcf8ce532ceada1d3191b2961f0009fd8b3f1b7497991df9b67f49ea.att: UNSUPPORTED: Invalid parameter at 'ImageManifest' failed to satisfy constraint: 'Image has to have at least 1 layer' 
-witness-kms-demo (main) $ cosign attach attestation --attestation build-attach-attestation.json 756546933635.dkr.ecr.us-east-1.amazonaws.com/witness-attach-testing@sha256:416afe5cdcf8ce532ceada1d3191b2961f0009fd8b3f1b7497991df9b67f49ea
-Using payload from: build-attach-attestation.json%                                                                                     witness-kms-demo (main) $ /Users/rahulxf/PleaseHelpMeGod/witness/bin/witness attach attestation --attestation build-attach-attestation2.json 756546933635.dkr.ecr.us-east-1.amazonaws.com/witness-attach-testing@sha256:416afe5cdcf8ce532ceada1d3191b2961f0009fd8b3f1b7497991df9b67f49ea
-INFO    756546933635.dkr.ecr.us-east-1.amazonaws.com/witness-attach-testing@sha256:416afe5cdcf8ce532ceada1d3191b2961f0009fd8b3f1b7497991df9b67f49ea 
-INFO    att                                          
-INFO    ref: 756546933635.dkr.ecr.us-east-1.amazonaws.com/witness-attach-testing@sha256:416afe5cdcf8ce532ceada1d3191b2961f0009fd8b3f1b7497991df9b67f49ea 
-INFO    desc mediaType: application/vnd.oci.image.index.v1+json 
-INFO    index                                        
-INFO    AttachAttestationToUnknown:                  
-INFO    index Attestations                           
-INFO    attestations                                 
-INFO    sha256:416afe5cdcf8ce532ceada1d3191b2961f0009fd8b3f1b7497991df9b67f49ea 
-INFO    img %s&{0x1400053e0d0 756546933635.dkr.ecr.us-east-1.amazonaws.com/witness-attach-testing:sha256-416afe5cdcf8ce532ceada1d3191b2961f0009fd8b3f1b7497991df9b67f49ea.att} 
-INFO    &{0x14000a02480}                             
-INFO    remote.write                                 
-INFO    756546933635.dkr.ecr.us-east-1.amazonaws.com/witness-attach-testing:sha256-416afe5cdcf8ce532ceada1d3191b2961f0009fd8b3f1b7497991df9b67f49ea.att 
-witness-kms-demo (main) $ 
+docker build -t hello-witness-ecr-test .
+docker tag hello-witness-ecr-test 756546933635.dkr.ecr.us-east-1.amazonaws.com/witness-ecr-testing:latest
+docker push 756546933635.dkr.ecr.us-east-1.amazonaws.com/witness-ecr-testing:latest          
+```
+
+### Generate attestation for build process 
+```
+witness run --step build -k attachTest.pem -o build-attach-attestation.json -- docker build .
+```
+
+### Attach your attestation 
+```
+/Users/rahulxf/PleaseHelpMeGod/witness/bin/witness attach attestation --attestation build-attach-attestation.json 756546933635.dkr.ecr.us-east-1.amazonaws.com/witness-ecr-testing@sha256:18b1f8b1c61f0a8df73d35efc49cc5af9471a88260f74f5d8e4170a22b77426e
+```
+<img width="1470" height="956" alt="Screenshot 2025-09-19 at 12 34 07 AM" src="https://github.com/user-attachments/assets/8601b8ad-0c59-4539-afbe-4a55c3e7c2aa" />
+<img width="1470" height="956" alt="Screenshot 2025-09-19 at 12 34 17 AM" src="https://github.com/user-attachments/assets/6dedad98-257a-48ac-bf71-ed4845cf020f" />
+
+
+
+<details>
+  <summary>ECR Full logs</summary>
+
+```ts
+witness-kms-demo (main) $ aws ecr create-repository --repository-name witness-ecr-testing --region us-east-1
+
+witness-kms-demo (main) $ aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 756546933635.dkr.ecr.us-east-1.amazonaws.com
+Login Succeeded
+
+witness-kms-demo (main) $ docker build -t hello-witness-ecr-test .
+[+] Building 0.9s (1/3)                                                                                           docker:desktop-linux
+[+] Building 35.4s (14/14) FINISHED                                                                               docker:desktop-linux
+ => [internal] load build definition from Dockerfile                                                                              0.0s
+ => => transferring dockerfile: 598B                                                                                              0.0s
+ => WARN: FromAsCasing: 'as' and 'FROM' keywords' casing do not match (line 1)                                                    0.0s
+ => [internal] load metadata for cgr.dev/chainguard/static@sha256:a432665213f109d5e48111316030eecc5191654cf02a5b66ac6c5d6b310a55  5.0s
+ => [internal] load metadata for cgr.dev/chainguard/go@sha256:c87a8cf30c9a4e58df04712e1bb0b98d8d0421cc924e88f6fca4a6fabf45c6b4    5.6s
+ => [auth] chainguard/static:pull token for cgr.dev                                                                               0.0s
+ => [auth] chainguard/go:pull token for cgr.dev                                                                                   0.0s
+ => [internal] load .dockerignore                                                                                                 0.0s
+ => => transferring context: 2B                                                                                                   0.0s
+ => [builder 1/4] FROM cgr.dev/chainguard/go@sha256:c87a8cf30c9a4e58df04712e1bb0b98d8d0421cc924e88f6fca4a6fabf45c6b4              0.0s
+ => => resolve cgr.dev/chainguard/go@sha256:c87a8cf30c9a4e58df04712e1bb0b98d8d0421cc924e88f6fca4a6fabf45c6b4                      0.0s
+ => [internal] load build context                                                                                                 0.0s
+ => => transferring context: 55.92kB                                                                                              0.0s
+ => CACHED [stage-1 1/2] FROM cgr.dev/chainguard/static@sha256:a432665213f109d5e48111316030eecc5191654cf02a5b66ac6c5d6b310a5511   0.0s
+ => => resolve cgr.dev/chainguard/static@sha256:a432665213f109d5e48111316030eecc5191654cf02a5b66ac6c5d6b310a5511                  0.0s
+ => CACHED [builder 2/4] WORKDIR /build                                                                                           0.0s
+ => [builder 3/4] COPY . .                                                                                                        0.1s
+ => [builder 4/4] RUN go build -o bin/software                                                                                   29.4s
+ => [stage-1 2/2] COPY --from=builder /build/bin/software /software                                                               0.0s 
+ => exporting to image                                                                                                            0.2s 
+ => => exporting layers                                                                                                           0.1s
+ => => exporting manifest sha256:7f4c1e51837a656f624201fe3438dfdd684f320854f8193edb4e4e7269cdfcc4                                 0.0s
+ => => exporting config sha256:c505cf3e740080747e94e4753d2374183918f4af097a0cc0f185cbe9e95bf39c                                   0.0s
+ => => exporting attestation manifest sha256:f8c4f8ad7ff0f0fca403305ba15a4ec662ad72379b0ac50aff118b73272650a7                     0.0s
+ => => exporting manifest list sha256:18b1f8b1c61f0a8df73d35efc49cc5af9471a88260f74f5d8e4170a22b77426e                            0.0s
+ => => naming to docker.io/library/hello-witness-ecr-test:latest                                                                  0.0s
+ => => unpacking to docker.io/library/hello-witness-ecr-test:latest                                                               0.0s
+
+View build details: docker-desktop://dashboard/build/desktop-linux/desktop-linux/pkfmtin25r1pc1l6bhwo5wpd6
+
+ 1 warning found (use docker --debug to expand):
+ - FromAsCasing: 'as' and 'FROM' keywords' casing do not match (line 1)
+
+
+witness-kms-demo (main) $ docker tag hello-witness-ecr-test 756546933635.dkr.ecr.us-east-1.amazonaws.com/witness-ecr-testing:latest
+witness-kms-demo (main) $ docker push 756546933635.dkr.ecr.us-east-1.amazonaws.com/witness-ecr-testing:latest
+
+The push refers to repository [756546933635.dkr.ecr.us-east-1.amazonaws.com/witness-ecr-testing]
+97cffeee8e17: Pushed 
+30876f01f23d: Pushed 
+a93cf116b643: Pushed 
+latest: digest: sha256:18b1f8b1c61f0a8df73d35efc49cc5af9471a88260f74f5d8e4170a22b77426e size: 855
+
+
+witness-kms-demo (main) $ witness run --step build -k attachTest.pem -o build-attach-attestation.json -- docker build .
+INFO    Starting prematerial attestors stage...      
+INFO    Starting git attestor...                     
+INFO    Starting environment attestor...             
+INFO    Finished environment attestor... (0.000204292s) 
+INFO    Finished git attestor... (0.117941458s)      
+INFO    Completed prematerial attestors stage...     
+INFO    Starting material attestors stage...         
+INFO    Starting material attestor...                
+INFO    Finished material attestor... (0.031380208s) 
+INFO    Completed material attestors stage...        
+INFO    Starting execute attestors stage...          
+INFO    Starting command-run attestor...             
+
+
+witness-kms-demo (main) $ /Users/rahulxf/PleaseHelpMeGod/witness/bin/witness attach attestation --attestation build-attach-attestation.json 756546933635.dkr.ecr.us-east-1.amazonaws.com/witness-ecr-testing@sha256:18b1f8b1c61f0a8df73d35efc49cc5af9471a88260f74f5d8e4170a22b77426e
+INFO    Opening attestation file:build-attach-attestation.json 
+INFO    Creating attestation with DSSE payload       
+INFO    Fetching signed entity for:756546933635.dkr.ecr.us-east-1.amazonaws.com/witness-ecr-testing@sha256:18b1f8b1c61f0a8df73d35efc49cc5af9471a88260f74f5d8e4170a22b77426e 
+INFO    Attaching attestation to signed entity       
+INFO    AttachAttestationToUnknown                   
+INFO    Writing attestation to repository:756546933635.dkr.ecr.us-east-1.amazonaws.com/witness-ecr-testing 
+INFO    dedupeAndReplace attestation                 
+INFO    dedupeAndReplace function                    
+INFO    dedupeAndReplace AppendSignatures func       
+INFO    AppendSignatures                             
+INFO    append(adds, mutate.Addendum %s[{0x14000380fc0 { 0001-01-01 00:00:00 +0000 UTC   false} [] map[dev.witnessproject.witness/signature:] }] 
+INFO    mutate.Append(base, adds...) %s&{0x14000922180} 
+
 ```
 </details>
+
