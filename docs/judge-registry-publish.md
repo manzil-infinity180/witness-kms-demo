@@ -68,7 +68,44 @@ After editing `testifysec.env`, reload:
 sudo -E env "PATH=$HOME/go/bin:$PATH" jade dev reload
 ```
 
-## Test procedure
+## Local registry (no credentials, no cloud — try this first)
+
+Fastest way to see the whole pipeline work. Uses go-containerregistry's
+in-memory registry — no docker daemon or account needed.
+
+```bash
+# 1. spin up a local OCI registry on :1338 (flag is -port, not -address)
+go run github.com/google/go-containerregistry/cmd/registry@v0.20.7 -port 1338 &
+
+# 2. push a minimal image and note its digest
+echo "hello witness" > file.txt && tar -cf layer.tar file.txt
+go run github.com/google/go-containerregistry/cmd/crane@v0.20.7 append \
+  -t 127.0.0.1:1338/demo/app:latest -f layer.tar
+go run github.com/google/go-containerregistry/cmd/crane@v0.20.7 digest 127.0.0.1:1338/demo/app:latest
+
+# 3. allow plain HTTP in testifysec.env (local only!), then reload judge
+#    REGISTRY_PUBLISH_ALLOW_HTTP=true
+sudo -E env "PATH=$HOME/go/bin:$PATH" jade dev reload
+```
+
+Then follow steps 2–5 of the main procedure below with
+`repo = 127.0.0.1:1338/demo/app` and the digest from above. Verification is
+plain curl (the in-memory registry needs no auth):
+
+```bash
+curl -s http://127.0.0.1:1338/v2/demo/app/tags/list
+# → {"name":"demo/app","tags":["latest","sha256-<digest>.att"]}
+
+curl -s http://127.0.0.1:1338/v2/demo/app/manifests/sha256-<digest>.att \
+  -H "Accept: application/vnd.oci.image.manifest.v1+json"
+# → one layer, mediaType application/vnd.dsse.envelope.v1+json
+```
+
+Notes: ggcr treats `127.0.0.1`/`localhost` as HTTP automatically on the
+client side; the registry is in-memory, so contents vanish when the process
+stops. Remove `REGISTRY_PUBLISH_ALLOW_HTTP` before testing real registries.
+
+## Test procedure (real registries)
 
 ### 1. Push an image, note its digest
 
